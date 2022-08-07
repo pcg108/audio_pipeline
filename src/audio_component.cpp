@@ -20,10 +20,13 @@ public:
         , _m_clock{pb->lookup_impl<RelativeClock>()}
         , _m_pose{_m_sb->get_reader<pose_type>("slow_pose")}
         , xcoder{"", encoding ? ILLIXR_AUDIO::ABAudio::ProcessType::ENCODE : ILLIXR_AUDIO::ABAudio::ProcessType::DECODE}
-        , last_time{_m_clock->now()}
         , encoding_{encoding}
     {
         xcoder.loadSource();
+    }
+
+    virtual void _p_thread_setup() override {
+        last_time = _m_clock->now();
     }
 
     virtual skip_option _p_should_skip() override {
